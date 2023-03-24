@@ -20,5 +20,4 @@ namespace CaoDangThinh_2080601208_BIGSCHOOL.Models
         [Required]
         public byte CategoryId { get; set; }
     }
-
 }
