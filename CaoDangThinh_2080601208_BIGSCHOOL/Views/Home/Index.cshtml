@@ -1,28 +1,69 @@
-﻿@model IEnumerable<CaoDangThinh_2080601208_BIGSCHOOL.Models.Course>
+﻿@model CaoDangThinh_2080601208_BIGSCHOOL.ViewModels.CoursesViewModel
 @{
     ViewBag.Title = "Home Page";
 }
+<div class="row" style="padding-top:20px">
+    <ul class="course">
+        @foreach (var course in Model.UpcomingCourses)
+        {
+            <li>
+                <div class="date">
+                    <div class="month">
+                        @course.DateTime.ToString("MM")
+                    </div>
+                    <div class="day">
+                        @course.DateTime.ToString("dd")
+                    </div>
+                </div>
+                <div class="details">
+                    <span class="lecturer">
+                        @course.Lecturer.Name
+                        @if (Model.ShowAction)
+                        {
+                            <button class="btn btn-link btn-sm js-toogle-follow" data-user-id="@course.LecturerId">Follow</button>
+                        }
+                    </span>
+                    <span class="category">
+                        @course.Category.Name
+                    </span>
+                    @if (Model.ShowAction)
+                    {
+                        <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toogle-attedance">Going?</button>
+                    }
+                </div>
+            </li>
+        }
+    </ul>
 
-<div class="course">
-      @foreach(var course in Model)
-            {
-               <li>
-                    <div class="date">
-                        <div class="month">
-                            @course.DateTime.ToString("MM")
-                        </div>
-                        <div class="day">
-                            @course.DateTime.ToString("dd")
-                        </div>
-                    </div>
-                    <div class="details">
-                        <span class="lecturer">
-                            @course.Lecturer.Name
-                        </span>
-                        <span class="category">
-                            @course.Category.Name
-                        </span>
-                    </div>
-                </li>
-            }
+    @section scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $(".js-toogle-attedance").click(function (e) {
+                    var button = $(e.target);
+                    $.post("api/attendances", { courseid: button.attr("data-course-id") })
+                        .done(function () {
+                            button.removeClass("bth-default")
+                                .addClass("btn-info")
+                                .text("Going");
+                        })
+                        .fail(function () {
+                            alert("Something failed!")
+                        })
+                })
+
+                $(".js-toogle-follow").click(function (e) {
+                    var button = $(e.target);
+                    $.post("api/followings", { followeeId: button.attr("data-user-id") })
+                        .done(function () {
+                            button
+                                .text("Following");
+                        })
+                        .fail(function () {
+                            alert("Something failed!")
+                        });
+                });
+            });
+        </script>
+    }
 </div>

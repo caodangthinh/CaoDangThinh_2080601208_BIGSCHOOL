@@ -13,7 +13,7 @@ namespace CaoDangThinh_2080601208_BIGSCHOOL.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202303210811218_AddNameColumnToApplicationUser"; }
+            get { return "202304021929570_AddNameColumnToApplicationUser"; }
         }
         
         string IMigrationMetadata.Source

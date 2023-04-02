@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
-
+using CaoDangThinh_2080601208_BIGSCHOOL.ViewModels;
 
 namespace CaoDangThinh_2080601208_BIGSCHOOL.Controllers
 {
@@ -20,9 +20,15 @@ namespace CaoDangThinh_2080601208_BIGSCHOOL.Controllers
         {
             var upcommingCourses = _dbContext.Courses
                 .Include(c => c.Lecturer)
-                .Include(c => c.Category)   
+                .Include(c => c.Category)
                 .Where(c => c.DateTime > DateTime.Now);
-            return View(upcommingCourses);
+
+            var viewModel = new CoursesViewModel
+            {
+                UpcomingCourses = upcommingCourses,
+                ShowAction = User.Identity.IsAuthenticated
+            };
+            return View(viewModel);
         }
 
         public ActionResult About()
